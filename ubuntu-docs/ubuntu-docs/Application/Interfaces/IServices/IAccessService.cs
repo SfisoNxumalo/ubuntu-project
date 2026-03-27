@@ -1,6 +1,6 @@
 ﻿using ubuntu_docs.Application.DTOs;
 
-namespace ubuntu_docs.Application.Interfaces
+namespace ubuntu_docs.Application.Interfaces.IServices
 {
     public interface IAccessService
     {

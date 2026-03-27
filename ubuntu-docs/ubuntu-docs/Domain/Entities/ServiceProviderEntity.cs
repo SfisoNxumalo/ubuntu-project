@@ -9,7 +9,7 @@
 
         public required string PasswordHash { get; set; }
 
-        public required string Role { get; set; }
+        public string Role { get; set; } = "service_provider";
 
         public required string Address { get; set; }
         public required string City { get; set; }

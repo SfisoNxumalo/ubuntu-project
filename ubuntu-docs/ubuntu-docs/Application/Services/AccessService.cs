@@ -1,9 +1,9 @@
 ﻿using ubuntu_docs.Application.DTOs;
-using ubuntu_docs.Application.Interfaces;
 using ubuntu_docs.Data;
 using ubuntu_docs.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using ubuntu_docs.Application.Interfaces.IRepositories;
+using ubuntu_docs.Application.Interfaces.IServices;
 
 namespace ubuntu_docs.Application.Services
 {

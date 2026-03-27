@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ubuntu_docs.Application.DTOs;
-using ubuntu_docs.Application.Interfaces;
+using ubuntu_docs.Application.Interfaces.IServices;
 
 namespace ubuntu_docs.Controllers
 {
