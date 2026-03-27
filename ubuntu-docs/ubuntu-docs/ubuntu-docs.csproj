@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>ubuntu_docs</RootNamespace>
+    <UserSecretsId>94212729-0a27-4808-b38d-3047583a89ee</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
