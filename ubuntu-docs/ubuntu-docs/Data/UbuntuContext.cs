@@ -12,6 +12,8 @@ namespace ubuntu_docs.Data
         public DbSet<DocumentEntity> Documents { get; set; }
         public DbSet<UserDocumentEntity> UserDocuments { get; set; }
 
+        public DbSet<UserServiceProviderEntity> UserServiceProviders { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -109,6 +111,29 @@ namespace ubuntu_docs.Data
 
                 
                 entity.HasIndex(e => new { e.UserId, e.DocumentId })
+                      .IsUnique();
+            });
+
+            // Responsible for ensure user's receive documents from only authorised service providers
+            modelBuilder.Entity<UserServiceProviderEntity>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                
+                entity.Property(e => e.IsActive).IsRequired();
+
+                entity.HasOne(e => e.User)
+                      .WithMany(u => u.ServiceProviderAccesses)
+                      .HasForeignKey(e => e.UserId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.ServiceProvider)
+                      .WithMany(sp => sp.UserAccesses)
+                      .HasForeignKey(e => e.ServiceProviderId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // 🔥 Prevent duplicate access entries
+                entity.HasIndex(e => new { e.UserId, e.ServiceProviderId })
                       .IsUnique();
             });
         }

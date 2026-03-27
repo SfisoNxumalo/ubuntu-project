@@ -23,5 +23,7 @@ namespace ubuntu_docs.Domain.Entities
         public required string Province { get; set; }
 
         public ICollection<UserDocumentEntity> UserDocuments { get; set; }
+
+        public ICollection<UserServiceProviderEntity> ServiceProviderAccesses { get; set; } = new List<UserServiceProviderEntity>();
     }
 }

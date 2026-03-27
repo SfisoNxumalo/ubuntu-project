@@ -23,5 +23,7 @@
 
         public ICollection<UserDocumentEntity> UserDocuments { get; set; } = new List<UserDocumentEntity>();
         public ICollection<DocumentEntity> Documents { get; set; } = new List<DocumentEntity>();
+
+        public ICollection<UserServiceProviderEntity> UserAccesses { get; set; } = new List<UserServiceProviderEntity>();
     }
 }
