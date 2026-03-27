@@ -1,0 +1,6 @@
+@ubuntu_docs_HostAddress = http://localhost:5239
+
+GET {{ubuntu_docs_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
