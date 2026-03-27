@@ -13,6 +13,6 @@
 
         public string? Summary { get; set; }
 
-        public ICollection<UserDocumentEntity> UserDocuments { get; set; }
+        public ICollection<UserDocumentEntity>? UserDocuments { get; set; }
     }
 }

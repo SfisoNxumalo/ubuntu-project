@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using ubuntu_docs.Application.Interfaces.IRepositories;
+using ubuntu_docs.Application.Interfaces.IServices;
+using ubuntu_docs.Application.Services;
 using ubuntu_docs.Data;
+using ubuntu_docs.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

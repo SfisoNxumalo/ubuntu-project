@@ -16,7 +16,7 @@ namespace ubuntu_docs.Domain.Entities
 
         public required string PasswordHash { get; set; }
 
-        public required string Role { get; set; }
+        public required string Role { get; set; } = "user";
 
         public required string Phone { get; set; }
 
