@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { motion } from "framer-motion";
-import Navbar from "../Navbar";
+import Navbar from "./Navbar";
 
 type Props = {
   children: ReactNode;

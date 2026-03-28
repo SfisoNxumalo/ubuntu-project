@@ -11,16 +11,17 @@ import {
 import PublicLayout from "./app/layout/PublicLayout";
 import UserShellLayout from "./app/layout/user/UserShellLayout";
 import ProviderShellLayout from "./app/layout/provider/ProviderShellLayout";
+import UserDashboard from './features/user/pages/UserDashboard';
+import UserDocumentsPage from './features/user/pages/UserDocumentPage';
+import UploadDocumentPage from './features/provider/pages/UploadDocumentPage';
+import UserProvidersPage from './features/user/pages/UserProvidersPage';
 
 /* Temporary test pages */
 const LandingPage = () => <div>Landing Page</div>;
 const LoginPage = () => <div>Login Page</div>;
 
-const UserDashboard = () => <div>User Dashboard</div>;
-const UserDocuments = () => <div>User Documents</div>;
 
 const ProviderDashboard = () => <div>Provider Dashboard</div>;
-const UploadPage = () => <div>Upload Document</div>;
 
 export default function App() {
   return (
@@ -45,17 +46,17 @@ export default function App() {
             </PublicLayout>
           }
         />
-
         
         <Route path="/user" element={<UserShellLayout />}>
           <Route index element={<UserDashboard />} />
-          <Route path="documents" element={<UserDocuments />} />
+          <Route path="documents" element={<UserDocumentsPage />} />
+          <Route path="providers" element={<UserProvidersPage />} />
         </Route>
 
         
         <Route path="/provider" element={<ProviderShellLayout />}>
           <Route index element={<ProviderDashboard />} />
-          <Route path="upload" element={<UploadPage />} />
+          <Route path="upload" element={<UploadDocumentPage />} />
         </Route>
 
        

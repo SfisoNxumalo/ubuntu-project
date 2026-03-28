@@ -4,6 +4,7 @@ import { LayoutDashboard, FileText, User } from "lucide-react";
 
 const items = [
   { label: "Dashboard", path: "/user", icon: LayoutDashboard },
+  { label: "Providers", path: "/user/providers", icon: LayoutDashboard },
   { label: "My Documents", path: "/user/documents", icon: FileText },
   { label: "Profile", path: "/user/profile", icon: User },
 ];
