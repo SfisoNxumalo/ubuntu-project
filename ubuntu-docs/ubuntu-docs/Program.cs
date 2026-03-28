@@ -22,7 +22,6 @@ builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 builder.Services.AddScoped<IUserDocumentRepository, UserDocumentRepository>();
 
 
-
 // Service DI
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IServiceProviderService, ServiceProviderService>();
