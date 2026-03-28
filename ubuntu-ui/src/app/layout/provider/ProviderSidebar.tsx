@@ -5,6 +5,7 @@ import {
   Upload,
   FileText,
   Users,
+  User,
 } from "lucide-react";
 
 const items = [
@@ -12,6 +13,7 @@ const items = [
   { label: "Upload", path: "/provider/upload", icon: Upload },
   { label: "Documents", path: "/provider/documents", icon: FileText },
   { label: "Users", path: "/provider/users", icon: Users },
+  { label: "Profile", path: "/provider/profile", icon: User },
 ];
 
 export default function ProviderSidebar() {

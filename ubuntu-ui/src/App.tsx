@@ -18,6 +18,10 @@ import UserProvidersPage from './features/user/pages/UserProvidersPage';
 import UserProfilePage from './features/user/pages/UserProfilePage';
 import ViewDocumentPage from './features/user/pages/ViewDocumentPage';
 import ProviderDashboard from './features/provider/pages/ProviderDashboard';
+import ProviderUsersPage from './features/provider/pages/ProviderUsersPage';
+import ProviderUserDetailsPage from './features/provider/pages/ProviderUserDetailsPage';
+import ProviderDocumentsPage from './features/provider/pages/ProviderDocumentsPage';
+import ProviderProfilePage from './features/provider/pages/ProviderProfilePage';
 
 /* Temporary test pages */
 const LandingPage = () => <div>Landing Page</div>;
@@ -29,7 +33,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* 🌍 PUBLIC */}
+        {/* PUBLIC */}
         <Route
           path="/"
           element={
@@ -60,6 +64,10 @@ export default function App() {
         <Route path="/provider" element={<ProviderShellLayout />}>
           <Route index element={<ProviderDashboard />} />
           <Route path="upload" element={<UploadDocumentPage />} />
+          <Route path="users" element={<ProviderUsersPage />} />
+          <Route path="users/:id" element={<ProviderUserDetailsPage />} />
+          <Route path="documents" element={<ProviderDocumentsPage />} />
+           <Route path="profile" element={<ProviderProfilePage />} />
         </Route>
 
        
