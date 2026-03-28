@@ -17,13 +17,12 @@ import UploadDocumentPage from './features/provider/pages/UploadDocumentPage';
 import UserProvidersPage from './features/user/pages/UserProvidersPage';
 import UserProfilePage from './features/user/pages/UserProfilePage';
 import ViewDocumentPage from './features/user/pages/ViewDocumentPage';
+import ProviderDashboard from './features/provider/pages/ProviderDashboard';
 
 /* Temporary test pages */
 const LandingPage = () => <div>Landing Page</div>;
 const LoginPage = () => <div>Login Page</div>;
 
-
-const ProviderDashboard = () => <div>Provider Dashboard</div>;
 
 export default function App() {
   return (
