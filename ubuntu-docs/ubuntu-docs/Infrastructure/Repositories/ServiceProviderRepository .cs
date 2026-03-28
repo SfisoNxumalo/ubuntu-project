@@ -46,5 +46,14 @@ namespace ubuntu_docs.Infrastructure.Repositories
                 .Where(sp => !sp.IsDeleted)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<UserEntity>> GetUsersByServiceProviderIdAsync(Guid serviceProviderId)
+        {
+            return await _context.UserServiceProviders
+                .Where(x => x.ServiceProviderId == serviceProviderId && x.IsActive)
+                .Select(x => x.User)
+                .Where(u => !u.IsDeleted)
+                .ToListAsync();
+        }
     }
 }

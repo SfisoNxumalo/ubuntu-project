@@ -22,6 +22,7 @@ builder.Services.AddScoped<IAccessRepository, AccessRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IServiceProviderService, ServiceProviderService>();
 builder.Services.AddScoped<IAccessService, AccessService>();
+builder.Services.AddScoped<IPdfExtractionService, PdfPigExtractionService>();
 
 
 

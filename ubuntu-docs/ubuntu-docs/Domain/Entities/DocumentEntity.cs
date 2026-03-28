@@ -13,6 +13,8 @@
 
         public string? Summary { get; set; }
 
+        public string? Content { get; set; } // Extracted PDF text
+
         public ICollection<UserDocumentEntity>? UserDocuments { get; set; }
     }
 }

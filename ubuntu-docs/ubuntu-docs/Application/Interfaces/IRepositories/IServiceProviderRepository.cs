@@ -11,5 +11,7 @@ namespace ubuntu_docs.Application.Interfaces.IRepositories
         Task<ServiceProviderEntity?> GetByIdAsync(Guid id);
 
         Task<IEnumerable<ServiceProviderEntity>> GetByUserIdAsync(Guid userId);
+
+        Task<IEnumerable<UserEntity>> GetUsersByServiceProviderIdAsync(Guid serviceProviderId);
     }
 }

@@ -9,5 +9,7 @@ namespace ubuntu_docs.Application.Interfaces.IServices
         Task<IEnumerable<ServiceProviderDto>> GetAllAsync();
 
         Task<IEnumerable<ServiceProviderDto>> GetByUserIdAsync(Guid userId);
+
+        Task<IEnumerable<UserDto>> GetUsersByServiceProviderIdAsync(Guid serviceProviderId);
     }
 }
