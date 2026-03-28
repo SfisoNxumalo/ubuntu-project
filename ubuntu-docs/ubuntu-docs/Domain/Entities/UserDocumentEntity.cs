@@ -14,5 +14,7 @@
         public required DateTime AssignedAt { get; set; }
         public required bool IsRead { get; set; } = false;
 
+        public required string ContactPerson {  get; set; }
+
     }
 }

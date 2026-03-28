@@ -3,12 +3,13 @@ using ubuntu_docs.Application.Interfaces.IRepositories;
 using ubuntu_docs.Application.Interfaces.IServices;
 using ubuntu_docs.Application.Services;
 using ubuntu_docs.Data;
+using ubuntu_docs.Infrastructure.Integration.GeminiService;
 using ubuntu_docs.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddHttpClient<GeminiService>();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -17,12 +18,20 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IServiceProviderRepository, ServiceProviderRepository>();
 builder.Services.AddScoped<IAccessRepository, AccessRepository>();
+builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+builder.Services.AddScoped<IUserDocumentRepository, UserDocumentRepository>();
+
+
 
 // Service DI
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IServiceProviderService, ServiceProviderService>();
 builder.Services.AddScoped<IAccessService, AccessService>();
 builder.Services.AddScoped<IPdfExtractionService, PdfPigExtractionService>();
+builder.Services.AddScoped<IDocumentService, DocumentService>();
+builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
+builder.Services.AddScoped<IUserDocumentService, UserDocumentService>();
+builder.Services.AddScoped<IDocumentAIService, GeminiService>();
 
 
 
