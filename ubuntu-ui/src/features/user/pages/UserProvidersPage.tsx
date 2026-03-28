@@ -1,44 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { getServiceProviders } from "../../../services/service_provider_service";
+import type { ServiceProvider } from "../../../interfaces/ServiceProvider";
 
-type Provider = {
-  id: string;
-  companyName: string;
-  email: string;
-  phoneNumber: string;
-  city: string;
-  country: string;
-  industry: string;
-  isActivated: boolean;
-};
-
-const mockProviders: Provider[] = [
-  {
-    id: "1",
-    companyName: "Yourway",
-    email: "yourway@gmail.com",
-    phoneNumber: "0119848760",
-    city: "Johannesburg",
-    country: "South Africa",
-    industry: "Insurance",
-    isActivated: false,
-  },
-  {
-    id: "2",
-    companyName: "HealthCorp",
-    email: "health@gmail.com",
-    phoneNumber: "0211234567",
-    city: "Cape Town",
-    country: "South Africa",
-    industry: "Healthcare",
-    isActivated: true,
-  },
-];
 
 export default function UserProvidersPage() {
-  const [providers, setProviders] = useState(mockProviders);
+  const [providers, setProviders] = useState<ServiceProvider[]>([]);
+//   const [serviceProviders, setServiceProviders] = useState<ServiceProvider[]>([]);
   const [search, setSearch] = useState("");
-  const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState<ServiceProvider | null>(null);
 
   const [filters, setFilters] = useState({
     city: "",
@@ -46,12 +16,25 @@ export default function UserProvidersPage() {
     industry: "",
   });
 
-  /* 🔥 Dynamic dropdown values */
+  useEffect(()=>{
+    const getReceiver = async() =>{
+      const res = await getServiceProviders();
+
+      if(res.status === 200){
+        setProviders(res.data)
+        console.log(res.data);
+      }
+    }
+
+    getReceiver()
+  },[]);
+
+  /*  Dynamic dropdown values */
   const cities = [...new Set(providers.map((p) => p.city))];
   const countries = [...new Set(providers.map((p) => p.country))];
   const industries = [...new Set(providers.map((p) => p.industry))];
 
-  /* 🔍 Filtering */
+  /* Filtering */
   const filtered = providers.filter((p) => {
     return (
       p.companyName.toLowerCase().includes(search.toLowerCase()) &&
@@ -86,7 +69,7 @@ export default function UserProvidersPage() {
         </p>
       </div>
 
-      {/* 🔍 Search */}
+      {/* Search */}
       <input
         placeholder="Search providers..."
         value={search}
@@ -153,9 +136,9 @@ export default function UserProvidersPage() {
             key={provider.id}
             provider={provider}
             onToggle={() => {
-              if (!provider.isActivated) {
-                setSelectedProvider(provider);
-              }
+            //   if (!provider.isActivated) {
+            //     setSelectedProvider(provider);
+            //   }
             }}
           />
         ))}
@@ -180,7 +163,7 @@ function ProviderCard({
   provider,
   onToggle,
 }: {
-  provider: Provider;
+  provider: ServiceProvider;
   onToggle: () => void;
 }) {
   return (
@@ -196,7 +179,7 @@ function ProviderCard({
       </div>
 
       {/* Toggle */}
-      <button
+      {/* <button
         disabled={provider.isActivated}
         onClick={onToggle}
         className={`w-12 h-6 flex items-center rounded-full p-1 transition ${
@@ -210,7 +193,7 @@ function ProviderCard({
             provider.isActivated ? "translate-x-6" : ""
           }`}
         />
-      </button>
+      </button> */}
     </motion.div>
   );
 }
@@ -221,7 +204,7 @@ function ConfirmModal({
   onConfirm,
   onClose,
 }: {
-  provider: Provider;
+  provider: ServiceProvider;
   onConfirm: () => void;
   onClose: () => void;
 }) {

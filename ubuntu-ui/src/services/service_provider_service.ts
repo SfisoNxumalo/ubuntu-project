@@ -1,11 +1,12 @@
+import type { AxiosResponse } from "axios";
 import { serviceProvidersEndpoint } from "../endpoints/endpoint";
 import type { ServiceProvider } from "../interfaces/ServiceProvider";
 import { httpService } from "../utils/httpService/httpService";
 
 
-export async function getServiceProviders() {
+export async function getServiceProviders():Promise<AxiosResponse<ServiceProvider[]>> {
   try {
-    const res = await httpService.get<ServiceProvider>(serviceProvidersEndpoint);
+    const res = await httpService.get<ServiceProvider[]>(serviceProvidersEndpoint);
     return res;
   } catch (err) {
     console.error('Failed to send message:', err);
