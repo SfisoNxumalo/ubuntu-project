@@ -12,9 +12,11 @@ import PublicLayout from "./app/layout/PublicLayout";
 import UserShellLayout from "./app/layout/user/UserShellLayout";
 import ProviderShellLayout from "./app/layout/provider/ProviderShellLayout";
 import UserDashboard from './features/user/pages/UserDashboard';
-import UserDocumentsPage from './features/user/pages/UserDocumentPage';
+import UserDocumentsPage from './features/user/pages/UserDocumentsPage';
 import UploadDocumentPage from './features/provider/pages/UploadDocumentPage';
 import UserProvidersPage from './features/user/pages/UserProvidersPage';
+import UserProfilePage from './features/user/pages/UserProfilePage';
+import ViewDocumentPage from './features/user/pages/ViewDocumentPage';
 
 /* Temporary test pages */
 const LandingPage = () => <div>Landing Page</div>;
@@ -51,6 +53,8 @@ export default function App() {
           <Route index element={<UserDashboard />} />
           <Route path="documents" element={<UserDocumentsPage />} />
           <Route path="providers" element={<UserProvidersPage />} />
+          <Route path="profile" element={<UserProfilePage />} />
+          <Route path="documents/:id" element={<ViewDocumentPage />} />
         </Route>
 
         

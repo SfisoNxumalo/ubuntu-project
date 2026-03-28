@@ -1,13 +1,33 @@
 import { motion } from "framer-motion";
 import { FileText, Search, PlayCircle } from "lucide-react";
+import { getUserDocuments } from "../../../services/api_service";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const documents = [
+const documents:DocProps[] = [
   { id: 1, title: "Bank Statement - March", date: "2 days ago" },
   { id: 2, title: "Medical Report", date: "5 days ago" },
   { id: 3, title: "Lease Agreement", date: "1 week ago" },
 ];
 
 export default function UserDocumentsPage() {
+
+  const [userDocuments, setUserDocuments] = useState<any[]>([]);
+  
+    useEffect(()=>{
+      const fetchUserDocuments = async() =>{
+        const res = await getUserDocuments("acf13ea8-1747-4cec-a242-cd81c7aa1f13");
+  
+        if(res.status === 200){
+          setUserDocuments(res.data)
+          console.log(">>>> ", res.data);
+          
+        }
+      }
+  
+      fetchUserDocuments()
+    },[]);
+    
   return (
     <div className="flex flex-col gap-6">
       
@@ -37,11 +57,13 @@ export default function UserDocumentsPage() {
 }
 
 type DocProps = {
+  id:number;
   title: string;
   date: string;
 };
 
-function DocumentCard({ title, date }: DocProps) {
+function DocumentCard({id, title, date }: DocProps) {
+    const navigate = useNavigate();
   return (
     <motion.div
       whileHover={{ scale: 1.01 }}
@@ -59,7 +81,7 @@ function DocumentCard({ title, date }: DocProps) {
       {/* Actions */}
       <div className="flex items-center gap-3">
         
-        <button className="text-sm px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition">
+        <button onClick={() => navigate(`/user/documents/${id}`)} className="text-sm px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition">
           View
         </button>
 

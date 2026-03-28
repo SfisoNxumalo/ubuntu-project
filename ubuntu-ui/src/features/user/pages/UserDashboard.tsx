@@ -1,7 +1,25 @@
 import { motion } from "framer-motion";
 import { FileText, Upload, PlayCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getUserDocuments } from "../../../services/api_service";
+import { useNavigate } from "react-router-dom";
 
 export default function UserDashboard() {
+
+  const [userDocuments, setUserDocuments] = useState<any[]>([]);
+
+  useEffect(()=>{
+    const fetchUserDocuments = async() =>{
+      const res = await getUserDocuments("acf13ea8-1747-4cec-a242-cd81c7aa1f13");
+
+      if(res.status === 200){
+        setUserDocuments(res.data)
+      }
+    }
+
+    fetchUserDocuments()
+  },[]);
+
   return (
     <div className="flex flex-col gap-8">
       
@@ -23,21 +41,25 @@ export default function UserDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         <DashboardCard
+          
           icon={FileText}
           title="View Documents"
           description="Browse your uploaded and shared documents"
+          url="/user/documents"
         />
 
         <DashboardCard
           icon={PlayCircle}
           title="Listen to Summary"
           description="Play AI-generated summaries instantly"
+          url="/user"
         />
 
         <DashboardCard
           icon={Upload}
           title="Upload Document"
           description="Upload a new document for summarisation"
+          url="/user"
         />
       </div>
 
@@ -46,9 +68,9 @@ export default function UserDashboard() {
         <h2 className="text-xl font-semibold mb-4">Recent Documents</h2>
 
         <div className="grid gap-4">
-          <RecentDocCard title="Bank Statement - March" />
-          <RecentDocCard title="Medical Report" />
-          <RecentDocCard title="Lease Agreement" />
+          <RecentDocCard id="1" title="Bank Statement - March" />
+          <RecentDocCard id="2" title="Medical Report" />
+          <RecentDocCard id="3" title="Lease Agreement" />
         </div>
       </div>
     </div>
@@ -59,11 +81,16 @@ type CardProps = {
   icon: any;
   title: string;
   description: string;
+  url:string
 };
 
-function DashboardCard({ icon: Icon, title, description }: CardProps) {
+function DashboardCard({ icon: Icon, title, description, url }: CardProps) {
+
+  const navigate = useNavigate();
+
   return (
     <motion.div
+      onClick={() => navigate(url)}
       whileHover={{ scale: 1.03 }}
       className="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md cursor-pointer transition"
     >
@@ -75,7 +102,10 @@ function DashboardCard({ icon: Icon, title, description }: CardProps) {
   );
 }
 
-function RecentDocCard({ title }: { title: string }) {
+function RecentDocCard({ title, id }: { title: string, id:string }) {
+
+  const navigate = useNavigate();
+  
   return (
     <motion.div
       whileHover={{ scale: 1.01 }}
@@ -86,7 +116,7 @@ function RecentDocCard({ title }: { title: string }) {
         <span>{title}</span>
       </div>
 
-      <button className="text-sm text-primary hover:underline">
+      <button onClick={() => navigate(`/user/documents/${id}`)} className="text-sm text-primary hover:underline">
         View
       </button>
     </motion.div>

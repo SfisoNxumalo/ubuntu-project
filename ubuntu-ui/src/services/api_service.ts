@@ -1,5 +1,5 @@
 import type { AxiosResponse } from "axios";
-import { serviceProvidersEndpoint } from "../endpoints/endpoint";
+import { getUserDocumentsEndpoint, serviceProvidersEndpoint } from "../endpoints/endpoint";
 import type { ServiceProvider } from "../interfaces/ServiceProvider";
 import { httpService } from "../utils/httpService/httpService";
 
@@ -13,3 +13,15 @@ export async function getServiceProviders():Promise<AxiosResponse<ServiceProvide
     throw err; // rethrow if you want the caller to handle it
   }
 }
+
+export async function getUserDocuments(id:string): Promise<AxiosResponse<ServiceProvider[]>> {
+  try {
+    const res = await httpService.get<ServiceProvider[]>(getUserDocumentsEndpoint(id));
+    return res;
+  } catch (err) {
+    console.error('Failed to send message:', err);
+    throw err; // rethrow if you want the caller to handle it
+  }
+}
+
+

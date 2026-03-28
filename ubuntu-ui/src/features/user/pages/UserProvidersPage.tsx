@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getServiceProviders } from "../../../services/service_provider_service";
+import { getServiceProviders } from "../../../services/api_service";
 import type { ServiceProvider } from "../../../interfaces/ServiceProvider";
 
 
