@@ -6,4 +6,5 @@ export type ServiceProvider = {
     city: string,
     country: string,
     industry: string
+    logo:string
 }

@@ -1,14 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Send } from "lucide-react";
-
-/* Mock Data */
-const mockDocument = {
-  title: "Bank Statement - March",
-  provider: "Yourway Insurance",
-  summary:
-    "This document provides a summary of financial transactions, including deposits, withdrawals, and account balances for the month.",
-};
+import { PlayCircle, Send } from "lucide-react";
+import { getDocumentById } from "../../../services/api_service";
+import type { UploadedDocument } from "../../../interfaces/UploadedDocument";
+import { useParams } from "react-router-dom";
+import { useSpeech } from "react-text-to-speech";
 
 type Message = {
   role: "user" | "ai";
@@ -16,9 +12,56 @@ type Message = {
 };
 
 export default function ViewDocumentPage() {
+
+  const { id } = useParams();
+
   const [messages, setMessages] = useState<Message[]>([
     { role: "ai", text: "Ask me anything about this document." },
   ]);
+
+  const [playing, setPlaying] = useState<boolean>(false)
+
+   const [document, setDocument] = useState<UploadedDocument | null>(null);
+
+   if (id){
+      useEffect(()=>{
+        const fetchUserDocuments = async() =>{
+          const res = await getDocumentById(id);
+
+          if(res.status === 200){
+            setDocument(res.data)
+          }
+        }
+
+        fetchUserDocuments()
+      },[]);
+   }
+
+  //  const { start, pause, stop } = useSpeech({
+  //   text: document?.content,
+  // });
+
+  const [voice, setVoice] = useState<SpeechSynthesisVoice | null>(null);
+
+  useEffect(() => {
+    const voices = speechSynthesis.getVoices();
+
+    // Try pick a better voice (Google voices are usually best)
+    const preferred =
+      voices.find(v => v.name.includes("Google")) ||
+      voices.find(v => v.lang === "en-US");
+
+    setVoice(preferred || null);
+  }, []);
+
+  const { start, pause, stop } = useSpeech({
+    text: document?.content,
+     lang: "en-US",
+    rate: 1,
+    pitch: 1,
+  });
+
+  
 
   const [input, setInput] = useState("");
 
@@ -36,7 +79,7 @@ export default function ViewDocumentPage() {
     setInput("");
   };
 
-  return (
+  return ( 
     <div className="flex h-[calc(100vh-40px)] gap-6">
       
       {/* 📄 LEFT: Document */}
@@ -45,11 +88,24 @@ export default function ViewDocumentPage() {
         {/* Header */}
         <div>
           <h1 className="text-2xl font-semibold">
-            {mockDocument.title}
+            {document?.fileName}
           </h1>
           <p className="text-sm text-textSecondary mt-1">
-            Provided by {mockDocument.provider}
+            {/* Provided by {document?.provider} */}
           </p>
+          <button onClick={() => {
+            if(playing){
+              pause()
+              setPlaying(false)
+            }
+            else{
+              start()
+              setPlaying(true)
+            }
+          }} className="flex items-center gap-2 text-sm px-4 py-2 rounded-lg bg-primary hover:bg-primaryHover transition">
+            <PlayCircle size={16} />
+            { playing ? "pause" : "Listen"}
+          </button>
         </div>
 
         {/* Summary */}
@@ -59,11 +115,11 @@ export default function ViewDocumentPage() {
           className="p-6 rounded-2xl bg-white/5 border border-white/10"
         >
           <h2 className="text-lg font-semibold mb-3">
-            Summary
+            Content
           </h2>
 
           <p className="text-textSecondary leading-relaxed">
-            {mockDocument.summary}
+            {document?.content}
           </p>
         </motion.div>
       </div>

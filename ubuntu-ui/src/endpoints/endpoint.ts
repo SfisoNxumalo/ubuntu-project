@@ -2,14 +2,46 @@ export const baseURL = 'https://localhost:7109/api/'
 
 export const serviceProvidersEndpoint = `ServiceProvider`
 
-export function getServiceProviderUser(id:string):string {
+export function getServiceProviderByIdEndpoint(id:string):string {
     return `${serviceProvidersEndpoint}/${id}`;
 }
 
 export function getUserDocumentsEndpoint(id:string):string {
+    return `UserDocument/user/${id}`;
+}
+
+export function getDocumentByIdEndpoint(id:string):string {
+    return `Document/${id}`;
+}
+
+export function checkAccessEndpoint(userid:string, providerId:string) : string {
+    return `Access/check?userId=${userid}&serviceProviderId=${providerId}`
+}
+
+export const grantAccessEndpoint = `Access/grant`
+export const revokeAccessEndpoint = `Access/revoke`
+
+
+export function getServiceProviderDocumentsEndpoint(id:string):string {
     return `Document/user/${id}`;
 }
 
 export function getProviderUserEndpoint(id:string):string {
     return `${serviceProvidersEndpoint}/${id}/users`;
 }
+
+
+
+// ocument
+
+
+// GET
+// /api/UserDocument/user/{userId}
+
+
+// GET
+// /api/UserDocument/provider/{providerId}
+
+
+// PUT
+// /api/UserDocument/{id}/read

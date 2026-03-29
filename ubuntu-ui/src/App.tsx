@@ -22,6 +22,7 @@ import ProviderUsersPage from './features/provider/pages/ProviderUsersPage';
 import ProviderUserDetailsPage from './features/provider/pages/ProviderUserDetailsPage';
 import ProviderDocumentsPage from './features/provider/pages/ProviderDocumentsPage';
 import ProviderProfilePage from './features/provider/pages/ProviderProfilePage';
+import ProviderDetailsPage from './features/user/pages/ProviderDetailsPage';
 
 /* Temporary test pages */
 const LandingPage = () => <div>Landing Page</div>;
@@ -58,6 +59,7 @@ export default function App() {
           <Route path="providers" element={<UserProvidersPage />} />
           <Route path="profile" element={<UserProfilePage />} />
           <Route path="documents/:id" element={<ViewDocumentPage />} />
+          <Route path="providers/:id" element={<ProviderDetailsPage />} />
         </Route>
 
         

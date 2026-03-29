@@ -3,10 +3,11 @@ import { FileText, Upload, PlayCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getUserDocuments } from "../../../services/api_service";
 import { useNavigate } from "react-router-dom";
+import type { UserDocument } from "../../../interfaces/UserDocument";
 
 export default function UserDashboard() {
 
-  const [userDocuments, setUserDocuments] = useState<any[]>([]);
+  const [userDocuments, setUserDocuments] = useState<UserDocument[]>([]);
 
   useEffect(()=>{
     const fetchUserDocuments = async() =>{

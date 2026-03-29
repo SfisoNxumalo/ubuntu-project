@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getServiceProviders } from "../../../services/api_service";
 import type { ServiceProvider } from "../../../interfaces/ServiceProvider";
+import { useNavigate } from "react-router-dom";
 
 
 export default function UserProvidersPage() {
@@ -22,7 +23,6 @@ export default function UserProvidersPage() {
 
       if(res.status === 200){
         setProviders(res.data)
-        console.log(res.data);
       }
     }
 
@@ -166,8 +166,10 @@ function ProviderCard({
   provider: ServiceProvider;
   onToggle: () => void;
 }) {
+    const navigate = useNavigate();
   return (
     <motion.div
+      onClick={() => navigate(`/user/providers/${provider.id}`)}
       whileHover={{ scale: 1.01 }}
       className="p-5 rounded-2xl bg-white/5 border border-white/10 flex justify-between items-center"
     >
