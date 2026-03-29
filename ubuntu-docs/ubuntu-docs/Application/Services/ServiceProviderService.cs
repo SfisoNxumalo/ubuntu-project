@@ -73,17 +73,18 @@ namespace ubuntu_docs.Application.Services
             };
         }
 
-        public async Task<IEnumerable<UserDto>> GetUsersByServiceProviderIdAsync(Guid serviceProviderId)
+        public async Task<IEnumerable<ProviderUserDto>> GetUsersByServiceProviderIdAsync(Guid serviceProviderId)
         {
             var users = await _repository.GetUsersByServiceProviderIdAsync(serviceProviderId);
 
-            return users.Select(u => new UserDto
+            return users.Select(u => new ProviderUserDto
             {
                 Id = u.Id,
                 FirstName = u.FirstName,
                 LastName = u.LastName,
                 Email = u.Email,
-                Phone = u.Phone
+                Phone = u.Phone,
+                Province = u.Province
             });
         }
     }

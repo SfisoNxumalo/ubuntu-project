@@ -31,6 +31,7 @@ builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
 builder.Services.AddScoped<IUserDocumentService, UserDocumentService>();
 builder.Services.AddScoped<IDocumentAIService, GeminiService>();
+builder.Services.AddScoped<IDocumentQAService, DocumentQAService>();
 
 
 

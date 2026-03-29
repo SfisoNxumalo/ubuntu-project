@@ -27,7 +27,7 @@ namespace ubuntu_docs.Infrastructure.Integration.GeminiService
             throw new NotImplementedException();
         }
 
-        public async Task<string> AskQuestionAsync(string prompt, string pdfContent, string userQuestion)
+        public async Task<string> AskQuestionAsync(string prompt)
         {
             var url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={_apiKey}";
 

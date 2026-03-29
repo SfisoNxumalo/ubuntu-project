@@ -2,6 +2,6 @@
 {
     public interface IDocumentAIService
     {
-        Task<string> AskQuestionAsync(string prompt, string content, string question);
+        Task<string> AskQuestionAsync(string prompt);
     }
 }
