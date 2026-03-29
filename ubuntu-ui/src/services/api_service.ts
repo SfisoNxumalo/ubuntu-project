@@ -1,9 +1,11 @@
 import type { AxiosResponse } from "axios";
-import { checkAccessEndpoint, getDocumentByIdEndpoint, getServiceProviderByIdEndpoint, getUserDocumentsEndpoint, grantAccessEndpoint, revokeAccessEndpoint, serviceProvidersEndpoint } from "../endpoints/endpoint";
+import { AskAIEndpoint, checkAccessEndpoint, getDocumentByIdEndpoint, getProviderDocumentsEndpoint, getProviderUserEndpoint, getServiceProviderByIdEndpoint, getUserDocumentsEndpoint, grantAccessEndpoint, revokeAccessEndpoint, serviceProvidersEndpoint, uploadDocumentEndpoint } from "../endpoints/endpoint";
 import type { ServiceProvider } from "../interfaces/ServiceProvider";
 import { httpService } from "../utils/httpService/httpService";
 import type { UserDocument } from "../interfaces/UserDocument";
 import type { UploadedDocument } from "../interfaces/UploadedDocument";
+import type { ServiceProviderUser } from "../interfaces/ServiceProviderUser";
+import type { AskRequest, AskResponse } from "../interfaces/AskRequest";
 
 
 export async function getServiceProviders():Promise<AxiosResponse<ServiceProvider[]>> {
@@ -16,9 +18,30 @@ export async function getServiceProviders():Promise<AxiosResponse<ServiceProvide
   }
 }
 
+export async function getServiceProvidersUsers(id:string):Promise<AxiosResponse<ServiceProviderUser[]>> {
+  try {
+    const res = await httpService.get<ServiceProviderUser[]>(getProviderUserEndpoint(id));
+    return res;
+  } catch (err) {
+    console.error('Failed to send message:', err);
+    throw err; // rethrow if you want the caller to handle it
+  }
+}
+
+
 export async function getUserDocuments(id:string): Promise<AxiosResponse<UserDocument[]>> {
   try {
     const res = await httpService.get<UserDocument[]>(getUserDocumentsEndpoint(id));
+    return res;
+  } catch (err) {
+    console.error('Failed to send message:', err);
+    throw err; // rethrow if you want the caller to handle it
+  }
+}
+
+export async function getProviderDocuments(id:string): Promise<AxiosResponse<UserDocument[]>> {
+  try {
+    const res = await httpService.get<UserDocument[]>(getProviderDocumentsEndpoint(id));
     return res;
   } catch (err) {
     console.error('Failed to send message:', err);
@@ -84,4 +107,32 @@ export async function updateProviderAccess(id:string, provId:string, grant:boole
   }
 }
 
+export async function uploadDocument(data:FormData) {
+try {
+
+    const res = await httpService.post(uploadDocumentEndpoint, data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+    return res;
+  } catch (err) {
+    console.error('Failed to send message:', err);
+    throw err; // rethrow if you want the caller to handle it
+  }
+}
+
+export async function AskAI(data:AskRequest): Promise<AxiosResponse<AskResponse>> {
+
+try {
+
+    const res = await httpService.post<AskResponse>(AskAIEndpoint, data);
+
+    return res;
+  } catch (err) {
+    console.error('Failed to send message:', err);
+    throw err; // rethrow if you want the caller to handle it
+  }
+}
 

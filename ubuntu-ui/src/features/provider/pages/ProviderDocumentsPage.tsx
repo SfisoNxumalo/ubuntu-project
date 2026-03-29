@@ -1,39 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
+import type { UserDocument } from "../../../interfaces/UserDocument";
+import { getProviderDocuments } from "../../../services/api_service";
 
 /* Type */
-type ProviderDocument = {
-  username: string;
-  documentName: string;
-  documentId: string;
-  assignedAt: string;
-  isRead: boolean;
-};
-
-/* Mock Data */
-const mockDocuments: ProviderDocument[] = [
-  {
-    username: "Sifiso Mawila",
-    documentName: "Bank Statement - March",
-    documentId: "doc-1",
-    assignedAt: "2026-03-20",
-    isRead: true,
-  },
-  {
-    username: "Jane Smith",
-    documentName: "Insurance Policy",
-    documentId: "doc-2",
-    assignedAt: "2026-03-18",
-    isRead: false,
-  },
-];
 
 export default function ProviderDocumentsPage() {
   const [search, setSearch] = useState("");
 
-  const filtered = mockDocuments.filter((d) =>
-    `${d.username} ${d.documentName}`
+  const [userDocuments, setUserDocuments] = useState<UserDocument[]>([]);
+    
+      useEffect(()=>{
+        const fetchUserDocuments = async() =>{
+          const res = await getProviderDocuments("77dc48a7-ac12-4ad4-888b-8643451ccad5");
+    
+          if(res.status === 200){
+            setUserDocuments(res.data)
+            
+          }
+        }
+    
+        fetchUserDocuments()
+      },[]);
+
+  const filtered = userDocuments.filter((d) =>
+    `${d.user} ${d.fileName}`
       .toLowerCase()
       .includes(search.toLowerCase())
   );
@@ -82,9 +74,9 @@ export default function ProviderDocumentsPage() {
                 whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
                 className="border-t border-white/5"
               >
-                <td className="p-4 font-medium">{doc.username}</td>
+                <td className="p-4 font-medium">{doc.user}</td>
 
-                <td className="p-4">{doc.documentName}</td>
+                <td className="p-4">{doc.fileName}</td>
 
                 <td className="p-4 text-textSecondary">
                   {doc.assignedAt}

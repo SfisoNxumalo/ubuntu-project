@@ -6,7 +6,7 @@ import {
   Activity,
   Send,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -18,21 +18,17 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import type { ServiceProviderUser } from "../../../interfaces/ServiceProviderUser";
+import { getProviderDocuments, getServiceProvidersUsers } from "../../../services/api_service";
+import type { UserDocument } from "../../../interfaces/UserDocument";
+import { useNavigate } from "react-router-dom";
 
 /* Mock Data */
 const stats = [
-  { label: "Documents Uploaded", value: "128", icon: FileText },
-  { label: "Active Users", value: "42", icon: Users },
-  { label: "Summaries Generated", value: "310", icon: Activity },
-  { label: "Pending Actions", value: "5", icon: Upload },
-];
-
-const uploadData = [
-  { name: "Jan", uploads: 30 },
-  { name: "Feb", uploads: 45 },
-  { name: "Mar", uploads: 60 },
-  { name: "Apr", uploads: 50 },
-  { name: "May", uploads: 70 },
+  { label: "Documents Uploaded", value: "0", icon: FileText },
+  { label: "Active Users", value: "0", icon: Users },
+  { label: "Summaries Generated", value: "0", icon: Activity },
+  { label: "Pending Actions", value: "0", icon: Upload },
 ];
 
 const industryData = [
@@ -42,29 +38,56 @@ const industryData = [
   { name: "Other", value: 15 },
 ];
 
-const recentDocs = [
-  "Bank Statement - March",
-  "Insurance Policy",
-  "Medical Report",
-];
-
 export default function ProviderDashboard() {
   const [messages, setMessages] = useState([
     { role: "ai", text: "Need help uploading or assigning documents?" },
   ]);
-  const [input, setInput] = useState("");
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const [, setServiceProviderUsers] = useState<number>(0);
+  const [uploadData, setuploadData] = useState<any[]>([]);
+    
+      useEffect(()=>{
+            const fetchUsers = async() =>{
+              const res = await getServiceProvidersUsers("77dc48a7-ac12-4ad4-888b-8643451ccad5");
 
-    setMessages((prev) => [
-      ...prev,
-      { role: "user", text: input },
-      { role: "ai", text: "This is a simulated response." },
-    ]);
+              if(res.status === 200){
+                setServiceProviderUsers(res.data.length)
+                stats[1].value = String(res.data.length)
+              }
+            }
+            fetchUsers()
+          },[]);
 
-    setInput("");
-  };
+          const [userDocuments, setUserDocuments] = useState<UserDocument[]>([]);
+              
+                useEffect(()=>{
+                  const fetchUserDocuments = async() =>{
+                    const res = await getProviderDocuments("77dc48a7-ac12-4ad4-888b-8643451ccad5");
+              
+                    if(res.status === 200){
+                      setUserDocuments(res.data)
+                      stats[0].value = String(res.data.length)
+                      const output = getUploadDataSummary(res.data)
+                      setuploadData(output)
+                    }
+                  }
+              
+                  fetchUserDocuments()
+                },[]);
+
+        const [input, setInput] = useState("");
+
+        const handleSend = () => {
+          if (!input.trim()) return;
+
+          setMessages((prev) => [
+            ...prev,
+            { role: "user", text: input },
+            { role: "ai", text: "This is a simulated response." },
+          ]);
+
+          setInput("");
+        };
 
   return (
     <div className="flex flex-col gap-8">
@@ -143,49 +166,11 @@ export default function ProviderDashboard() {
         
         {/* Actions */}
         <div className="md:col-span-2 grid md:grid-cols-2 gap-4">
-          <ActionCard title="Upload Document" icon={Upload} />
-          <ActionCard title="Manage Documents" icon={FileText} />
-          <ActionCard title="View Users" icon={Users} />
-          <ActionCard title="Analytics" icon={Activity} />
+          <ActionCard title="Upload Document" icon={Upload} url="/provider/upload" />
+          <ActionCard title="View Users" icon={Users}  url="/provider/users"/>
         </div>
 
-        {/*  Chat Panel */}
-        <div className="flex flex-col rounded-2xl border border-white/10 bg-white/5">
-          
-          <div className="p-4 border-b border-white/10 font-semibold">
-            Assistant
-          </div>
-
-          <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-3">
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`max-w-[80%] px-3 py-2 rounded-xl text-sm ${
-                  msg.role === "user"
-                    ? "bg-primary text-white self-end"
-                    : "bg-white/10 self-start"
-                }`}
-              >
-                {msg.text}
-              </div>
-            ))}
-          </div>
-
-          <div className="p-3 border-t border-white/10 flex gap-2">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask something..."
-              className="flex-1 px-3 py-2 rounded-lg bg-white/5 outline-none text-sm"
-            />
-            <button
-              onClick={handleSend}
-              className="p-2 bg-primary rounded-lg"
-            >
-              <Send size={16} />
-            </button>
-          </div>
-        </div>
+  
       </div>
 
       {/*  Recent Documents */}
@@ -195,16 +180,14 @@ export default function ProviderDashboard() {
         </h2>
 
         <div className="grid gap-3">
-          {recentDocs.map((doc, i) => (
+          {userDocuments.slice(2).map((doc, i) => (
             <motion.div
               key={i}
               whileHover={{ scale: 1.01 }}
               className="p-4 rounded-xl bg-white/5 border border-white/10 flex justify-between"
             >
-              <span>{doc}</span>
-              <button className="text-primary text-sm">
-                View
-              </button>
+              <span>{doc.fileName}</span>
+              
             </motion.div>
           ))}
         </div>
@@ -217,12 +200,16 @@ export default function ProviderDashboard() {
 function ActionCard({
   title,
   icon: Icon,
+  url
 }: {
   title: string;
   icon: any;
+  url:string
 }) {
+  const navigate = useNavigate();
   return (
     <motion.div
+    onClick={() => navigate(url)}
       whileHover={{ scale: 1.03 }}
       className="p-5 rounded-2xl bg-white/5 border border-white/10 cursor-pointer"
     >
@@ -230,4 +217,28 @@ function ActionCard({
       <h3 className="font-semibold">{title}</h3>
     </motion.div>
   );
+}
+
+function getUploadDataSummary(data:UserDocument[]):any[]{
+
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  // 1. Group and count
+  const counts = data.reduce((acc:any, item) => {
+
+    const monthIndex = parseInt(item.assignedAt.substring(5, 7), 10) - 1;
+    const name = monthNames[monthIndex];
+    
+    acc[name] = (acc[name] || 0) + 1;
+    return acc;
+  }, {});
+
+  // 2. Format into the final array
+  const uploadData:any[] = monthNames
+    .map(name => ({
+      name: name,
+      uploads: counts[name] || 0
+    }))
+
+  return uploadData
 }

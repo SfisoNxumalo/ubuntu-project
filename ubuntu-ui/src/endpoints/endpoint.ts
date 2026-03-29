@@ -10,6 +10,10 @@ export function getUserDocumentsEndpoint(id:string):string {
     return `UserDocument/user/${id}`;
 }
 
+export function getProviderDocumentsEndpoint(id:string):string {
+    return `UserDocument/provider/${id}`;
+}
+
 export function getDocumentByIdEndpoint(id:string):string {
     return `Document/${id}`;
 }
@@ -30,18 +34,6 @@ export function getProviderUserEndpoint(id:string):string {
     return `${serviceProvidersEndpoint}/${id}/users`;
 }
 
+export const uploadDocumentEndpoint = "Document/upload"
 
-
-// ocument
-
-
-// GET
-// /api/UserDocument/user/{userId}
-
-
-// GET
-// /api/UserDocument/provider/{providerId}
-
-
-// PUT
-// /api/UserDocument/{id}/read
+export const AskAIEndpoint = "/DocumentQA/ask"

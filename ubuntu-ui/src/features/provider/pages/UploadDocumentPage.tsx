@@ -1,30 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Upload, FileText, Search } from "lucide-react";
+import type { ServiceProviderUser } from "../../../interfaces/ServiceProviderUser";
+import { getServiceProvidersUsers, uploadDocument } from "../../../services/api_service";
 
-type User = {
-  id: number;
-  name: string;
-  email: string;
-};
-
-const mockUsers: User[] = [
-  { id: 1, name: "John Doe", email: "john@example.com" },
-  { id: 2, name: "Jane Smith", email: "jane@example.com" },
-  { id: 3, name: "Michael Brown", email: "michael@example.com" },
-];
 
 export default function UploadDocumentPage() {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [search, setSearch] = useState("");
-  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [file, setFile] = useState<File | null>(null);
 
-  const filteredUsers = mockUsers.filter((u) =>
-    u.name.toLowerCase().includes(search.toLowerCase())
+  const [serviceProviderUsers, setServiceProviderUsers] = useState<ServiceProviderUser[]>([]);
+
+  useEffect(()=>{
+        const fetchUsers = async() =>{
+          const res = await getServiceProvidersUsers("77dc48a7-ac12-4ad4-888b-8643451ccad5");
+          if(res.status === 200){
+            setServiceProviderUsers(res.data)
+          }
+        }
+        fetchUsers()
+      },[]);
+
+  const filteredUsers = serviceProviderUsers.filter((u) =>
+    u.firstName.toLowerCase().includes(search.toLowerCase())
   );
 
-  const toggleUser = (id: number) => {
+  const toggleUser = (id: string) => {
     setSelectedUsers((prev) =>
       prev.includes(id)
         ? prev.filter((u) => u !== id)
@@ -38,6 +42,42 @@ export default function UploadDocumentPage() {
       "This document provides a summary of financial transactions and account balances."
     );
   };
+
+  const SERVICE_PROVIDER_ID = "77dc48a7-ac12-4ad4-888b-8643451ccad5";
+
+const handleUpload = async () => {
+  if (!file) {
+    alert("Please select a file");
+    return;
+  }
+
+  if (selectedUsers.length === 0) {
+    alert("Please select at least one user");
+    return;
+  }
+
+  //Super bad implementation. Due to time constraint, I'll leave it as it
+  try {
+    for (const userId of selectedUsers) {
+      const formData = new FormData();
+
+      formData.append("File", file);
+      formData.append("ServiceProviderId", SERVICE_PROVIDER_ID);
+      formData.append("UserId", userId);
+      formData.append("ContactPerson", "Admin");
+
+      const res = await uploadDocument(formData)
+
+      if(res.status == 200)
+      {
+        alert("Document uploaded and assigned successfully 🚀");
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Upload failed");
+  }
+};
 
   return (
     <div className="flex flex-col gap-8">
@@ -62,10 +102,19 @@ export default function UploadDocumentPage() {
           <p className="text-sm text-textSecondary">
             Drag & drop or click to upload
           </p>
-          <input type="file" className="mt-4" />
+          <input
+            type="file"
+            className="mt-4 "
+            
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0]) {
+                setFile(e.target.files[0]);
+              }
+            }}
+          />
         </motion.div>
 
-        {/* Title Input */}
+        {/* Title Input
         <div className="flex flex-col gap-2">
           <label className="text-sm text-textSecondary">Document Title</label>
           <input
@@ -74,11 +123,11 @@ export default function UploadDocumentPage() {
             placeholder="Enter document title..."
             className="px-4 py-3 rounded-xl bg-white/5 border border-white/10 outline-none"
           />
-        </div>
+        </div> */}
       </div>
 
       {/* AI Summary */}
-      <div className="flex flex-col gap-3">
+      {/* <div className="flex flex-col gap-3">
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold">AI Summary</h2>
 
@@ -97,7 +146,7 @@ export default function UploadDocumentPage() {
           rows={5}
           className="w-full p-4 rounded-xl bg-white/5 border border-white/10 outline-none resize-none"
         />
-      </div>
+      </div> */}
 
       {/* Users Table */}
       <div className="flex flex-col gap-4">
@@ -139,7 +188,7 @@ export default function UploadDocumentPage() {
                       onChange={() => toggleUser(user.id)}
                     />
                   </td>
-                  <td className="p-3">{user.name}</td>
+                  <td className="p-3">{user.firstName + " " + user.lastName}</td>
                   <td className="p-3 text-textSecondary">{user.email}</td>
                 </tr>
               ))}
@@ -150,7 +199,7 @@ export default function UploadDocumentPage() {
 
       {/* Submit */}
       <div className="flex justify-end">
-        <button className="px-6 py-3 rounded-xl bg-primary hover:bg-primaryHover shadow-glow">
+        <button onClick={handleUpload} className="px-6 py-3 rounded-xl bg-primary hover:bg-primaryHover shadow-glow">
           Upload & Assign
         </button>
       </div>

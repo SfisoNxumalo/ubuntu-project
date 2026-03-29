@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { PlayCircle, Send } from "lucide-react";
-import { getDocumentById } from "../../../services/api_service";
+import { AskAI, getDocumentById } from "../../../services/api_service";
 import type { UploadedDocument } from "../../../interfaces/UploadedDocument";
 import { useParams } from "react-router-dom";
 import { useSpeech } from "react-text-to-speech";
+import type { AskRequest } from "../../../interfaces/AskRequest";
 
 type Message = {
   role: "user" | "ai";
@@ -61,19 +62,33 @@ export default function ViewDocumentPage() {
     pitch: 1,
   });
 
-  
-
   const [input, setInput] = useState("");
 
-  const handleSend = () => {
+  const handleSend = async ()  => {
+
+    if(!id)
+      return
+
     if (!input.trim()) return;
 
     const userMessage: Message = { role: "user", text: input };
 
+    const request:AskRequest = {
+      userId: "acf13ea8-1747-4cec-a242-cd81c7aa1f13",
+      documentId: id,
+      question: input
+    }
+
     const aiResponse: Message = {
-      role: "ai",
-      text: "This is a simulated AI response based on the document.",
-    };
+        role: "ai",
+        text: "AI could not respond",
+      };
+      const res = await AskAI(request);
+
+      if(res.status === 200){
+        aiResponse.text = res.data.answer
+      }
+        
 
     setMessages((prev) => [...prev, userMessage, aiResponse]);
     setInput("");
@@ -82,7 +97,7 @@ export default function ViewDocumentPage() {
   return ( 
     <div className="flex h-[calc(100vh-40px)] gap-6">
       
-      {/* 📄 LEFT: Document */}
+      
       <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-2">
         
         {/* Header */}
