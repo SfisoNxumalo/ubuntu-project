@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+
 import { motion } from "framer-motion";
 import { FileText } from "lucide-react";
 import { useState } from "react";
@@ -36,7 +36,7 @@ const mockDocuments: Document[] = [
 ];
 
 export default function ProviderUserDetailsPage() {
-  const { id } = useParams();
+
   const [search, setSearch] = useState("");
 
   const filteredDocs = mockDocuments.filter((doc) =>

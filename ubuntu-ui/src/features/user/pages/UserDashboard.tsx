@@ -7,7 +7,7 @@ import type { UserDocument } from "../../../interfaces/UserDocument";
 
 export default function UserDashboard() {
 
-  const [userDocuments, setUserDocuments] = useState<UserDocument[]>([]);
+  const [, setUserDocuments] = useState<UserDocument[]>([]);
 
   useEffect(()=>{
     const fetchUserDocuments = async() =>{

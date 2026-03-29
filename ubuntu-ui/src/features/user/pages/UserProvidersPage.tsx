@@ -161,7 +161,6 @@ export default function UserProvidersPage() {
 /* Provider Card */
 function ProviderCard({
   provider,
-  onToggle,
 }: {
   provider: ServiceProvider;
   onToggle: () => void;

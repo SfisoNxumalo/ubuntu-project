@@ -38,11 +38,9 @@ export default function ViewDocumentPage() {
       },[]);
    }
 
-  //  const { start, pause, stop } = useSpeech({
-  //   text: document?.content,
-  // });
 
-  const [voice, setVoice] = useState<SpeechSynthesisVoice | null>(null);
+
+  const [ ,setVoice] = useState<SpeechSynthesisVoice | null>(null);
 
   useEffect(() => {
     const voices = speechSynthesis.getVoices();
@@ -55,7 +53,7 @@ export default function ViewDocumentPage() {
     setVoice(preferred || null);
   }, []);
 
-  const { start, pause, stop } = useSpeech({
+  const { start, pause } = useSpeech({
     text: document?.content,
      lang: "en-US",
     rate: 1,

@@ -177,26 +177,6 @@ function ProfileTab({
   );
 }
 
-/* 🔹 Providers Tab (Simplified placeholder) */
-function ProvidersTab() {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="p-6 rounded-2xl bg-white/5 border border-white/10"
-    >
-      <h2 className="text-lg font-semibold mb-2">
-        Service Providers
-      </h2>
-      <p className="text-textSecondary text-sm">
-        Manage which providers can send you documents.
-      </p>
-
-      {/* 👉 You can later plug your full ProvidersPage here */}
-    </motion.div>
-  );
-}
-
 /* 🔹 Input */
 function InputField({
   label,

@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Upload, FileText, Search } from "lucide-react";
+import { Upload, Search } from "lucide-react";
 import type { ServiceProviderUser } from "../../../interfaces/ServiceProviderUser";
 import { getServiceProvidersUsers, uploadDocument } from "../../../services/api_service";
 
 
 export default function UploadDocumentPage() {
-  const [title, setTitle] = useState("");
-  const [summary, setSummary] = useState("");
+
   const [search, setSearch] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [file, setFile] = useState<File | null>(null);
@@ -36,12 +35,6 @@ export default function UploadDocumentPage() {
     );
   };
 
-  const handleGenerateSummary = () => {
-    // Mock AI response (replace with API later)
-    setSummary(
-      "This document provides a summary of financial transactions and account balances."
-    );
-  };
 
   const SERVICE_PROVIDER_ID = "77dc48a7-ac12-4ad4-888b-8643451ccad5";
 

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FileText, Search, PlayCircle } from "lucide-react";
+import { FileText, Search } from "lucide-react";
 import { getUserDocuments } from "../../../services/api_service";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";

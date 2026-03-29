@@ -3,8 +3,7 @@ import {
   FileText,
   Upload,
   Users,
-  Activity,
-  Send,
+  Activity
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
@@ -18,7 +17,6 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import type { ServiceProviderUser } from "../../../interfaces/ServiceProviderUser";
 import { getProviderDocuments, getServiceProvidersUsers } from "../../../services/api_service";
 import type { UserDocument } from "../../../interfaces/UserDocument";
 import { useNavigate } from "react-router-dom";
@@ -39,9 +37,6 @@ const industryData = [
 ];
 
 export default function ProviderDashboard() {
-  const [messages, setMessages] = useState([
-    { role: "ai", text: "Need help uploading or assigning documents?" },
-  ]);
 
   const [, setServiceProviderUsers] = useState<number>(0);
   const [uploadData, setuploadData] = useState<any[]>([]);
@@ -74,20 +69,6 @@ export default function ProviderDashboard() {
               
                   fetchUserDocuments()
                 },[]);
-
-        const [input, setInput] = useState("");
-
-        const handleSend = () => {
-          if (!input.trim()) return;
-
-          setMessages((prev) => [
-            ...prev,
-            { role: "user", text: input },
-            { role: "ai", text: "This is a simulated response." },
-          ]);
-
-          setInput("");
-        };
 
   return (
     <div className="flex flex-col gap-8">

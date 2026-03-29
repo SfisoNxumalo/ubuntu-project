@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import type { ServiceProviderUser } from "../../../interfaces/ServiceProviderUser";
 import { getServiceProvidersUsers } from "../../../services/api_service";
 
 
 export default function ProviderUsersPage() {
 
-  const navigate = useNavigate();
-    
   const [search, setSearch] = useState("");
 
   const [serviceProviderUsers, setServiceProviderUsers] = useState<ServiceProviderUser[]>([]);
