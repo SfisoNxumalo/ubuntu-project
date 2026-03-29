@@ -30,8 +30,8 @@ namespace ubuntu_docs.Application.Services
                 return string.Empty;
 
             
-            text = text.Replace("\r", " ");
-            text = text.Replace("\n", " ");
+            //text = text.Replace("\r", " ");
+            //text = text.Replace("\n", " ");
             text = text.Replace("  ", " ");
 
             return text.Trim();

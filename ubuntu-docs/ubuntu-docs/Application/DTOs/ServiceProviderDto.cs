@@ -11,5 +11,7 @@
         public string Country { get; set; }
 
         public string Industry { get; set; }
+
+        public string Logo { get; set; }
     }
 }

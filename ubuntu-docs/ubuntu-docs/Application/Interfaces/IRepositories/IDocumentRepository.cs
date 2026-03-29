@@ -1,4 +1,5 @@
-﻿using ubuntu_docs.Domain.Entities;
+﻿using ubuntu_docs.Application.DTOs;
+using ubuntu_docs.Domain.Entities;
 
 namespace ubuntu_docs.Application.Interfaces.IRepositories
 {
@@ -11,5 +12,7 @@ namespace ubuntu_docs.Application.Interfaces.IRepositories
         Task<IEnumerable<DocumentEntity>> GetByUserIdAsync(Guid userId);
 
         Task<IEnumerable<DocumentEntity>> GetByServiceProviderIdAsync(Guid serviceProviderId);
+
+        //Task<IEnumerable<DocumentResponseDto>> GetDocumentAndUserDetailsAsync(Guid providerID);
     }
 }

@@ -11,5 +11,7 @@ namespace ubuntu_docs.Application.Interfaces.IServices
         Task<IEnumerable<ServiceProviderDto>> GetByUserIdAsync(Guid userId);
 
         Task<IEnumerable<UserDto>> GetUsersByServiceProviderIdAsync(Guid serviceProviderId);
+
+        Task<ServiceProviderDto> GetById(Guid id);
     }
 }

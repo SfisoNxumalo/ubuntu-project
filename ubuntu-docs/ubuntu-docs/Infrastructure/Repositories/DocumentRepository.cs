@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ubuntu_docs.Application.DTOs;
 using ubuntu_docs.Application.Interfaces.IRepositories;
 using ubuntu_docs.Data;
 using ubuntu_docs.Domain.Entities;
@@ -47,5 +48,19 @@ namespace ubuntu_docs.Infrastructure.Repositories
                 .Where(d => d.ServiceProviderId == serviceProviderId && !d.IsDeleted)
                 .ToListAsync();
         }
+
+        //public async Task<IEnumerable<DocumentResponseDto>> GetDocumentAndUserDetailsAsync(Guid providerID)
+        //{
+        //    return await _context.UserDocuments
+        //        .Where(ud => ud.ServiceProviderId == providerID && !ud.IsDeleted)
+        //        .Select(ud => new DocumentResponseDto { 
+        //           Id = ud.Id,
+        //           FileName = ud.Document.FileName,
+        //           User = ud.User.FirstName + ud.User.LastName,
+        //           AssignedAt = ud.AssignedAt,
+        //           Status = ud.IsRead,
+        //        })
+        //        .ToListAsync();
+        //}
     }
 }

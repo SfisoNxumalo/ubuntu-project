@@ -6,7 +6,7 @@ namespace ubuntu_docs.Application.Interfaces.IServices
     {
         Task<Guid> UploadAndAssignAsync(UploadAndAssignDocumentDto dto);
 
-        Task<DocumentDto?> GetByIdAsync(Guid id);
+        Task<DocumentResponseDto?> GetByIdAsync(Guid id);
 
         Task<IEnumerable<DocumentDto>> GetByUserIdAsync(Guid userId);
 

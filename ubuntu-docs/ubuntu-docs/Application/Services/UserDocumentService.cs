@@ -48,6 +48,7 @@ namespace ubuntu_docs.Application.Services
             {
                 Id = x.Id,
                 UserId = x.UserId,
+                User = x.User?.FirstName + " " + x.User?.LastName,
                 DocumentId = x.DocumentId,
                 FileName = x.Document?.FileName,
                 FileUrl = x.Document?.FileUrl,

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ubuntu_docs.Data;
 
@@ -11,9 +12,11 @@ using ubuntu_docs.Data;
 namespace ubuntu_docs.Data.Migrations
 {
     [DbContext(typeof(UbuntuContext))]
-    partial class UbuntuContextModelSnapshot : ModelSnapshot
+    [Migration("20260328141249_UpdateDocumentEntity")]
+    partial class UpdateDocumentEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

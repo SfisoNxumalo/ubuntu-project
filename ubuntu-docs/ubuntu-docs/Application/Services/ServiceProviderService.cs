@@ -44,6 +44,13 @@ namespace ubuntu_docs.Application.Services
             return list.Select(MapToDto);
         }
 
+        public async Task<ServiceProviderDto> GetById(Guid id)
+        {
+            var ser = await _repository.GetByIdAsync(id);
+
+            return MapToDto(ser);
+        }
+
         public async Task<IEnumerable<ServiceProviderDto>> GetByUserIdAsync(Guid userId)
         {
             var list = await _repository.GetByUserIdAsync(userId);
@@ -61,7 +68,8 @@ namespace ubuntu_docs.Application.Services
                 PhoneNumber = entity.PhoneNumber,
                 City = entity.City,
                 Country = entity.Country,
-                Industry = entity.Industry
+                Industry = entity.Industry,
+                Logo = entity.LogoUrl
             };
         }
 

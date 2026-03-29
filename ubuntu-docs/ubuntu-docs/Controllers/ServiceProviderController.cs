@@ -47,5 +47,13 @@ namespace ubuntu_docs.Controllers
 
             return Ok(users);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var users = await _service.GetById(id);
+
+            return Ok(users);
+        }
     }
 }

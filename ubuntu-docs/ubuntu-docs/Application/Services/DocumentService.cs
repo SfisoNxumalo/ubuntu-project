@@ -29,7 +29,7 @@ namespace ubuntu_docs.Application.Services
 
         public async Task<Guid> UploadAndAssignAsync(UploadAndAssignDocumentDto dto)
         {
-            // 🔥 Validate access
+
             var hasAccess = await _accessService.HasAccessAsync(dto.UserId, dto.ServiceProviderId);
 
             if (!hasAccess)
@@ -43,18 +43,24 @@ namespace ubuntu_docs.Application.Services
             if (string.IsNullOrWhiteSpace(content))
                 throw new Exception("Failed to extract content");
 
+            
             stream.Position = 0;
+
+            Guid docId = Guid.NewGuid();
 
             // 2. Upload to blob
             var (url, blobName) = await _blobService.UploadAsync(
+                docId,
                 stream,
                 dto.File.FileName,
                 dto.File.ContentType
             );
 
+
             // 3. Save document
             var document = new DocumentEntity
             {
+                Id = docId,
                 FileName = dto.File.FileName,
                 FileUrl = url,
                 BlobName = blobName,
@@ -84,13 +90,13 @@ namespace ubuntu_docs.Application.Services
             return createdDoc.Id;
         }
 
-        public async Task<DocumentDto?> GetByIdAsync(Guid id)
+        public async Task<DocumentResponseDto?> GetByIdAsync(Guid id)
         {
             var doc = await _documentRepository.GetByIdAsync(id);
 
             if (doc == null) return null;
 
-            return Map(doc);
+            return MapDocDetails(doc);
         }
 
         public async Task<IEnumerable<DocumentDto>> GetByUserIdAsync(Guid userId)
@@ -117,6 +123,21 @@ namespace ubuntu_docs.Application.Services
                 ContentType = d.ContentType,
                 FileSize = d.FileSize,
                 Summary = d.Summary
+            };
+        }
+
+        private static DocumentResponseDto MapDocDetails(DocumentEntity d)
+        {
+            return new DocumentResponseDto
+            {
+                Id = d.Id,
+                FileName = d.FileName,
+                FileUrl = d.FileUrl,
+                ContentType = d.ContentType,
+                FileSize = d.FileSize,
+                Summary = d.Summary,
+                content = d.Content
+
             };
         }
     }
