@@ -4,6 +4,7 @@
 
 - [Backend README.md](./ubuntu-docs/README.md)
 - [Frontend README.md](./ubuntu-ui/README.md)
+- [Alexa project README.md](./ubuntu_assist_amaz)
 
 [Deployed App](https://ubuntu-frontend.azurewebsites.net/) Note: Sometimes you have to wait ~15 sec for the backend to respond from a cold start.
 
