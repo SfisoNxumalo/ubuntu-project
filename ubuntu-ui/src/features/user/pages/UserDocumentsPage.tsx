@@ -4,14 +4,22 @@ import { getUserDocuments } from "../../../services/api_service";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { UserDocument } from "../../../interfaces/UserDocument";
+import { useAuthStore } from "../../../stores/authStore";
 
 export default function UserDocumentsPage() {
 
   const [userDocuments, setUserDocuments] = useState<UserDocument[]>([]);
+  const user = useAuthStore((s) => s.user);
+    const navigate = useNavigate()
+  
+    if(!user) {
+      navigate('/')
+      return
+    }
   
     useEffect(()=>{
       const fetchUserDocuments = async() =>{
-        const res = await getUserDocuments("acf13ea8-1747-4cec-a242-cd81c7aa1f13");
+        const res = await getUserDocuments(user?.id);
   
         if(res.status === 200){
           setUserDocuments(res.data)

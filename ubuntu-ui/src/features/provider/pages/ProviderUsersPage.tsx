@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import type { ServiceProviderUser } from "../../../interfaces/ServiceProviderUser";
 import { getServiceProvidersUsers } from "../../../services/api_service";
+import { useAuthStore } from "../../../stores/authStore";
+import { useNavigate } from "react-router-dom";
 
 
 export default function ProviderUsersPage() {
@@ -10,10 +12,18 @@ export default function ProviderUsersPage() {
   const [search, setSearch] = useState("");
 
   const [serviceProviderUsers, setServiceProviderUsers] = useState<ServiceProviderUser[]>([]);
+
+  const user = useAuthStore((s) => s.user);
+  const navigate = useNavigate()
+
+  if(!user) {
+    navigate('/')
+    return
+  }
   
     useEffect(()=>{
           const fetchUsers = async() =>{
-            const res = await getServiceProvidersUsers("77dc48a7-ac12-4ad4-888b-8643451ccad5");
+            const res = await getServiceProvidersUsers(user?.id);
             if(res.status === 200){
               setServiceProviderUsers(res.data)
             }

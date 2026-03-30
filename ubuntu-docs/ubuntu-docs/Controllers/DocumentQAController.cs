@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ubuntu_docs.Application.DTOs;
 using ubuntu_docs.Application.Interfaces.IServices;
@@ -16,6 +17,7 @@ namespace ubuntu_docs.Controllers
             _service = service;
         }
 
+        [Authorize]
         [HttpPost("ask")]
         public async Task<IActionResult> Ask([FromBody] AskQuestionDto dto)
         {

@@ -9,10 +9,14 @@ namespace ubuntu_docs.Application.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly ITokenService _tokenService;
 
-        public UserService(IUserRepository userRepository)
+
+
+        public UserService(IUserRepository userRepository, ITokenService tokenService)
         {
             _userRepository = userRepository;
+            _tokenService = tokenService;
         }
 
         public async Task<UserDto> CreateUserAsync(CreateUserDto dto)
@@ -87,6 +91,48 @@ namespace ubuntu_docs.Application.Services
                 Phone = user.Phone,
                 Role = user.Role
             };
+        }
+
+        public async Task<AuthModel> Login(AuthDTO user)
+        {
+            
+            if (string.IsNullOrWhiteSpace(user.email) || string.IsNullOrWhiteSpace(user.password))
+            {
+                throw new Exception(
+                   string.IsNullOrWhiteSpace(user.email) ? "Email is required" : "Password is required"
+                );
+            }
+
+            var userFound = await _userRepository.GetByEmailAsync(user.email);
+
+            if (userFound == null) return null;
+
+
+            var hasher = new PasswordHasher<UserEntity>();
+            var result = hasher.VerifyHashedPassword(userFound, userFound.PasswordHash, user.password);
+
+            if (result == PasswordVerificationResult.Failed)
+                throw new Exception("Invalid credentials");
+
+            var userLoginDetails = new UserDetailsDto
+            {
+                Id = userFound.Id,
+                Email = userFound.Email,
+                FullName = userFound.FirstName + " " + userFound.LastName,
+                PhoneNumber = userFound.Phone,
+                Role = userFound.Role,
+            };
+
+            userLoginDetails.Token = _tokenService.GenerateAccessToken(userLoginDetails);
+            var refreshtoken = _tokenService.GenerateRefreshToken(userLoginDetails.Id);
+
+            var userDetails = new AuthModel
+            {
+                UserDetails = userLoginDetails,
+                RefreshToken = refreshtoken
+            };
+
+            return userDetails;
         }
     }
 }

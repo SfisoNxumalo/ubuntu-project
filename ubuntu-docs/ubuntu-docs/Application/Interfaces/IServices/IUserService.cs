@@ -13,5 +13,7 @@ namespace ubuntu_docs.Application.Interfaces.IServices
         Task<UserDto?> GetUserByEmailAsync(string email);
 
         Task<bool> DeleteUserAsync(Guid id);
+
+        Task<AuthModel> Login(AuthDTO user);
     }
 }

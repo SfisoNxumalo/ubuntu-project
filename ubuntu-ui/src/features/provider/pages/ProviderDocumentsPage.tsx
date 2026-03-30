@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import type { UserDocument } from "../../../interfaces/UserDocument";
 import { getProviderDocuments } from "../../../services/api_service";
+import { useAuthStore } from "../../../stores/authStore";
+import { useNavigate } from "react-router-dom";
 
 /* Type */
 
@@ -10,10 +12,18 @@ export default function ProviderDocumentsPage() {
   const [search, setSearch] = useState("");
 
   const [userDocuments, setUserDocuments] = useState<UserDocument[]>([]);
+
+  const user = useAuthStore((s) => s.user);
+  const navigate = useNavigate()
+
+  if(!user) {
+    navigate('/')
+    return
+  }
     
       useEffect(()=>{
         const fetchUserDocuments = async() =>{
-          const res = await getProviderDocuments("77dc48a7-ac12-4ad4-888b-8643451ccad5");
+          const res = await getProviderDocuments(user?.id);
     
           if(res.status === 200){
             setUserDocuments(res.data)

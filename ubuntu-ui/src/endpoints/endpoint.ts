@@ -1,4 +1,4 @@
-export const baseURL = 'https://localhost:7109/api/'
+export const baseURL = 'https://localhost:7109/api/' //replace
 
 export const serviceProvidersEndpoint = `ServiceProvider`
 
@@ -37,3 +37,10 @@ export function getProviderUserEndpoint(id:string):string {
 export const uploadDocumentEndpoint = "Document/upload"
 
 export const AskAIEndpoint = "/DocumentQA/ask"
+
+
+export function loginEndpoint(user:string):string {
+    return `${user}/login`;
+}
+
+export const registerUserEndpoint = `User`

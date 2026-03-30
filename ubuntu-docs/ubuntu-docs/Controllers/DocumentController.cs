@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ubuntu_docs.Application.DTOs;
 using ubuntu_docs.Application.Interfaces.IServices;
 
@@ -15,6 +16,7 @@ namespace ubuntu_docs.Controllers
             _service = service;
         }
 
+        [Authorize]
         [HttpPost("upload")]
         public async Task<IActionResult> Upload([FromForm] UploadAndAssignDocumentDto dto)
         {
@@ -23,7 +25,7 @@ namespace ubuntu_docs.Controllers
             return Ok(new { documentId = id });
         }
 
-        
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -35,7 +37,7 @@ namespace ubuntu_docs.Controllers
             return Ok(doc);
         }
 
-        
+        [Authorize]
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetByUser(Guid userId)
         {
@@ -44,7 +46,7 @@ namespace ubuntu_docs.Controllers
             return Ok(docs);
         }
 
-       
+        [Authorize]
         [HttpGet("provider/{providerId}")]
         public async Task<IActionResult> GetByProvider(Guid providerId)
         {

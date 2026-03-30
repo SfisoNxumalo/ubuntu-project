@@ -13,5 +13,7 @@ namespace ubuntu_docs.Application.Interfaces.IRepositories
         Task<IEnumerable<ServiceProviderEntity>> GetByUserIdAsync(Guid userId);
 
         Task<IEnumerable<UserEntity>> GetUsersByServiceProviderIdAsync(Guid serviceProviderId);
+
+        Task<ServiceProviderEntity?> GetByEmailAsync(string email);
     }
 }

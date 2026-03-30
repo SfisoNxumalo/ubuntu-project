@@ -4,6 +4,10 @@ using UglyToad.PdfPig.Content;
 
 namespace ubuntu_docs.Application.Services
 {
+    /// <summary>
+    /// Implementation of pdf text extraction service
+    /// Reason: It would be easier for our LLM to process text than a document with formatting
+    /// </summary>
     public class PdfPigExtractionService : IPdfExtractionService
     {
         public async Task<string> ExtractTextAsync(Stream fileStream)
@@ -29,9 +33,9 @@ namespace ubuntu_docs.Application.Services
             if (string.IsNullOrWhiteSpace(text))
                 return string.Empty;
 
-            
-            //text = text.Replace("\r", " ");
-            //text = text.Replace("\n", " ");
+
+            text = text.Replace("\r", " ");
+            text = text.Replace("\n", " ");
             text = text.Replace("  ", " ");
 
             return text.Trim();

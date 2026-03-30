@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { checkAccess, getServiceProviderById, updateProviderAccess, type AccessObj } from "../../../services/api_service";
 import type { ServiceProvider } from "../../../interfaces/ServiceProvider";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuthStore } from "../../../stores/authStore";
 
 /* Mock */
 
@@ -13,13 +14,22 @@ export default function ProviderDetailsPage() {
   const [isActivated, setActiviated] = useState<AccessObj | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
 
+  const user = useAuthStore((s) => s.user);
+  const navigate = useNavigate()
+
+  if(!user) {
+    navigate('/')
+    return
+  }
+
   if(id){
+
     useEffect(()=>{
       const fetchServiceProvider = async() =>{
         const res = await getServiceProviderById(id);
         if(res.status === 200){
           setProvider(res.data)
-          const hasAccess = await checkAccess("ACF13EA8-1747-4CEC-A242-CD81C7AA1F13", id);
+          const hasAccess = await checkAccess(user?.id, id);
           if(hasAccess.status === 200){
             setActiviated(hasAccess.data);
           }
@@ -34,7 +44,7 @@ export default function ProviderDetailsPage() {
     try {
         if (!id) return;
 
-        const res = await updateProviderAccess("ACF13EA8-1747-4CEC-A242-CD81C7AA1F13", id, grant);
+        const res = await updateProviderAccess(user?.id, id, grant);
 
         // 4. Check the status code as you intended
         if (res.status === 200) {

@@ -7,6 +7,10 @@ using System.Text;
 
 namespace ubuntu_docs.Infrastructure.Integration.GeminiService
 {
+    /// <summary>
+    /// Google Gemini implementation of IDocumentAIService used to
+    /// process document content and generate AI-powered responses.
+    /// </summary>
     public class GeminiService : IDocumentAIService
     {
         private readonly HttpClient _httpClient;

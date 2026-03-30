@@ -1,0 +1,28 @@
+services:
+  ubuntu-docs-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ubuntu-docs-api
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "YOUR_CONNECTION_STRING"
+      Gemini__ApiKey: "YOUR_GEMINI_KEY"
+      AzureBlob__ConnectionString: "YOUR_BLOB_CONNECTION"
+      AzureBlob__ContainerName: "YOUR_CONTAINER_NAME"
+      JwtConfig__Issuer: "https://localhost:7114"
+      JwtConfig__Audience: "http://localhost:5173"
+      JwtConfig__AccessTokenSecret: "YOUR_ACCESS_SECRET"
+      JwtConfig__RefreshTokenSecret: "YOUR_REFRESH_SECRET"
+
+  ubuntu-ui:
+    build:
+      context: ../ubuntu-ui
+      dockerfile: Dockerfile.ui
+    container_name: ubuntu-ui
+    ports:
+      - "5173:80"
+    depends_on:
+      - ubuntu-docs-api

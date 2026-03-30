@@ -1,19 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
-type ProviderProfile = {
-  companyName: string;
-  registrationNumber: string;
-  email: string;
-  phoneNumber: string;
-  address: string;
-  city: string;
-  country: string;
-  contactPersonName: string;
-  logoUrl: string;
-  industry: string;
-  updatedAt: string;
-};
+import { getServiceProviderById } from "../../../services/api_service";
+import type { ServiceProvider } from "../../../interfaces/ServiceProvider";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../../stores/authStore";
 
 const industries = [
   "Insurance",
@@ -23,34 +13,34 @@ const industries = [
   "Technology",
 ];
 
-const mockProvider: ProviderProfile = {
-  companyName: "Yourway",
-  registrationNumber: "REG-123456",
-  email: "yourway@gmail.com",
-  phoneNumber: "0119848760",
-  address: "123 Main Street",
-  city: "Johannesburg",
-  country: "South Africa",
-  contactPersonName: "John Doe",
-  logoUrl: "https://via.placeholder.com/80",
-  industry: "Insurance",
-  updatedAt: "2026-03-20",
-};
-
 export default function ProviderProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
-  const [provider, setProvider] = useState(mockProvider);
-  const [form, setForm] = useState(mockProvider);
+  const [provider, setProvider] = useState<ServiceProvider | null>(null);
+  const [form, setForm] = useState<ServiceProvider | null>(null);
 
-  const handleChange = (key: keyof ProviderProfile, value: string) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  };
+    const user = useAuthStore((s) => s.user);
+  const navigate = useNavigate()
+
+  if(!user) {
+    navigate('/')
+    return
+  }
+
+    if(user?.id){
+      useEffect(()=>{
+        const fetchServiceProvider = async() =>{
+          const res = await getServiceProviderById(user?.id);
+          if(res.status === 200){
+            setProvider(res.data)
+            setForm(res.data);
+          }
+        }
+        fetchServiceProvider()
+      },[]);
+    }
 
   const handleSave = () => {
-    setProvider({
-      ...form,
-      updatedAt: new Date().toISOString().split("T")[0],
-    });
+
     setIsEditing(false);
   };
 
@@ -68,9 +58,9 @@ export default function ProviderProfilePage() {
           <h1 className="text-2xl font-semibold">
             Company Profile
           </h1>
-          <p className="text-sm text-textSecondary">
+          {/* <p className="text-sm text-textSecondary">
             Last updated: {provider.updatedAt}
-          </p>
+          </p> */}
         </div>
 
         {!isEditing ? (
@@ -101,7 +91,7 @@ export default function ProviderProfilePage() {
       {/* Logo */}
       <div className="flex items-center gap-4">
         <img
-          src={provider.logoUrl}
+          src={provider?.logo}
           alt="Logo"
           className="w-20 h-20 rounded-xl object-cover border border-white/10"
         />
@@ -109,8 +99,8 @@ export default function ProviderProfilePage() {
           <input
             type="text"
             placeholder="Logo URL"
-            value={form.logoUrl}
-            onChange={(e) => handleChange("logoUrl", e.target.value)}
+            value={provider?.logo}
+            
             className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm"
           />
         )}
@@ -122,22 +112,21 @@ export default function ProviderProfilePage() {
         animate={{ opacity: 1, y: 0 }}
         className="grid md:grid-cols-2 gap-4 p-6 rounded-2xl bg-white/5 border border-white/10"
       >
-        <Input label="Company Name" value={form.companyName} disabled={!isEditing} onChange={(v:string) => handleChange("companyName", v)} />
-        <Input label="Registration Number" value={form.registrationNumber} disabled={!isEditing} onChange={(v:string) => handleChange("registrationNumber", v)} />
-        <Input label="Email" value={form.email} disabled={!isEditing} onChange={(v:string) => handleChange("email", v)} />
-        <Input label="Phone Number" value={form.phoneNumber} disabled={!isEditing} onChange={(v:string) => handleChange("phoneNumber", v)} />
-        <Input label="Address" value={form.address} disabled={!isEditing} onChange={(v:string) => handleChange("address", v)} />
-        <Input label="City" value={form.city} disabled={!isEditing} onChange={(v:string) => handleChange("city", v)} />
-        <Input label="Country" value={form.country} disabled={!isEditing} onChange={(v:string) => handleChange("country", v)} />
-        <Input label="Contact Person" value={form.contactPersonName} disabled={!isEditing} onChange={(v:string) => handleChange("contactPersonName", v)} />
+        <Input label="Company Name" value={form?.companyName} disabled={!isEditing}  />
+        
+        <Input label="Email" value={form?.email} disabled={!isEditing} />
+        <Input label="Phone Number" value={form?.phoneNumber} disabled={!isEditing}  />
+        
+        <Input label="City" value={form?.city} disabled={!isEditing}  />
+        <Input label="Country" value={form?.country} disabled={!isEditing}  />
+       
 
         {/* Industry Dropdown */}
         <div className="flex flex-col gap-1">
           <label className="text-sm text-textSecondary">Industry</label>
           <select
             disabled={!isEditing}
-            value={form.industry}
-            onChange={(e) => handleChange("industry", e.target.value)}
+            value={form?.industry}
             className={`px-4 py-3 rounded-xl border outline-none ${
               isEditing
                 ? "bg-white/10 border-primary"

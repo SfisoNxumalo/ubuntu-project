@@ -1,17 +1,21 @@
-﻿using ubuntu_docs.Application.DTOs;
+﻿using Microsoft.AspNetCore.Identity;
+using ubuntu_docs.Application.DTOs;
 using ubuntu_docs.Application.Interfaces.IRepositories;
 using ubuntu_docs.Application.Interfaces.IServices;
 using ubuntu_docs.Domain.Entities;
+using ubuntu_docs.Infrastructure.Repositories;
 
 namespace ubuntu_docs.Application.Services
 {
     public class ServiceProviderService : IServiceProviderService
     {
         private readonly IServiceProviderRepository _repository;
+        private readonly ITokenService _tokenService;
 
-        public ServiceProviderService(IServiceProviderRepository repository)
+        public ServiceProviderService(IServiceProviderRepository repository, ITokenService tokenService)
         {
             _repository = repository;
+            _tokenService = tokenService;
         }
 
         public async Task<ServiceProviderDto> CreateAsync(CreateServiceProviderDto dto)
@@ -29,8 +33,10 @@ namespace ubuntu_docs.Application.Services
                 LogoUrl = dto.LogoUrl,
                 Industry = dto.Industry,
                 PasswordHash = dto.Password
-
             };
+
+            var hasher = new PasswordHasher<ServiceProviderEntity>();
+            entity.PasswordHash = hasher.HashPassword(entity, entity.PasswordHash);
 
             var created = await _repository.CreateAsync(entity);
 
@@ -86,6 +92,49 @@ namespace ubuntu_docs.Application.Services
                 Phone = u.Phone,
                 Province = u.Province
             });
+        }
+
+
+        public async Task<AuthModel> Login(AuthDTO user)
+        {
+
+            if (string.IsNullOrWhiteSpace(user.email) || string.IsNullOrWhiteSpace(user.password))
+            {
+                throw new Exception(
+                   string.IsNullOrWhiteSpace(user.email) ? "Email is required" : "Password is required"
+                );
+            }
+
+            var userFound = await _repository.GetByEmailAsync(user.email);
+
+            if (userFound == null) return null;
+
+
+            var hasher = new PasswordHasher<ServiceProviderEntity>();
+            var result = hasher.VerifyHashedPassword(userFound, userFound.PasswordHash, user.password);
+
+            if (result == PasswordVerificationResult.Failed)
+                throw new Exception("Invalid credentials");
+
+            var userLoginDetails = new UserDetailsDto
+            {
+                Id = userFound.Id,
+                Email = userFound.Email,
+                FullName = userFound.Country,
+                PhoneNumber = userFound.PhoneNumber,
+                Role = userFound.Role,
+            };
+
+            userLoginDetails.Token = _tokenService.GenerateAccessToken(userLoginDetails);
+            var refreshtoken = _tokenService.GenerateRefreshToken(userLoginDetails.Id);
+
+            var userDetails = new AuthModel
+            {
+                UserDetails = userLoginDetails,
+                RefreshToken = refreshtoken
+            };
+
+            return userDetails;
         }
     }
 }

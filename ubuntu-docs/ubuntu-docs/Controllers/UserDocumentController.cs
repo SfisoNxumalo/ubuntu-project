@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ubuntu_docs.Application.Interfaces.IServices;
 
@@ -15,6 +16,7 @@ namespace ubuntu_docs.Controllers
             _service = service;
         }
 
+        [Authorize]
         // Get documents for user
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetByUser(Guid userId)
@@ -24,6 +26,7 @@ namespace ubuntu_docs.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         // Get documents for provider
         [HttpGet("provider/{providerId}")]
         public async Task<IActionResult> GetByProvider(Guid providerId)
@@ -33,6 +36,7 @@ namespace ubuntu_docs.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         //  Mark as read
         [HttpPut("{id}/read")]
         public async Task<IActionResult> MarkAsRead(Guid id)

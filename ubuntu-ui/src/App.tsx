@@ -23,11 +23,13 @@ import ProviderUserDetailsPage from './features/provider/pages/ProviderUserDetai
 import ProviderDocumentsPage from './features/provider/pages/ProviderDocumentsPage';
 import ProviderProfilePage from './features/provider/pages/ProviderProfilePage';
 import ProviderDetailsPage from './features/user/pages/ProviderDetailsPage';
+import ProviderLoginPage from './features/auth/ProviderLoginPage';
+import ProviderRegisterPage from './features/auth/ProviderRegisterPage';
+import UserLoginPage from './features/auth/UserLoginPage';
+import UserRegisterPage from './features/auth/UserRegisterPage';
+import LandingPage from './features/provider/pages/LandingPage';
 
 /* Temporary test pages */
-const LandingPage = () => <div>Landing Page</div>;
-const LoginPage = () => <div>Login Page</div>;
-
 
 export default function App() {
   return (
@@ -48,7 +50,34 @@ export default function App() {
           path="/login"
           element={
             <PublicLayout>
-              <LoginPage />
+              <UserLoginPage />
+            </PublicLayout>
+          }
+        />
+
+        <Route
+          path="/register"
+          element={
+            <PublicLayout>
+              <UserRegisterPage />
+            </PublicLayout>
+          }
+        />
+
+        <Route
+          path="/provider/login"
+          element={
+            <PublicLayout>
+              <ProviderLoginPage />
+            </PublicLayout>
+          }
+        />
+
+        <Route
+          path="/provider/register"
+          element={
+            <PublicLayout>
+              <ProviderRegisterPage />
             </PublicLayout>
           }
         />

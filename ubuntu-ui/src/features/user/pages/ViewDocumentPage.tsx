@@ -3,9 +3,10 @@ import { motion } from "framer-motion";
 import { PlayCircle, Send } from "lucide-react";
 import { AskAI, getDocumentById } from "../../../services/api_service";
 import type { UploadedDocument } from "../../../interfaces/UploadedDocument";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSpeech } from "react-text-to-speech";
 import type { AskRequest } from "../../../interfaces/AskRequest";
+import { useAuthStore } from "../../../stores/authStore";
 
 type Message = {
   role: "user" | "ai";
@@ -24,6 +25,14 @@ export default function ViewDocumentPage() {
 
    const [document, setDocument] = useState<UploadedDocument | null>(null);
 
+   const user = useAuthStore((s) => s.user);
+  const navigate = useNavigate()
+
+  if(!user) {
+    navigate('/')
+    return
+  }
+
    if (id){
       useEffect(()=>{
         const fetchUserDocuments = async() =>{
@@ -37,8 +46,6 @@ export default function ViewDocumentPage() {
         fetchUserDocuments()
       },[]);
    }
-
-
 
   const [ ,setVoice] = useState<SpeechSynthesisVoice | null>(null);
 
@@ -72,7 +79,7 @@ export default function ViewDocumentPage() {
     const userMessage: Message = { role: "user", text: input };
 
     const request:AskRequest = {
-      userId: "acf13ea8-1747-4cec-a242-cd81c7aa1f13",
+      userId: user?.id,
       documentId: id,
       question: input
     }

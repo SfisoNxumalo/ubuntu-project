@@ -25,7 +25,10 @@ export default function Navbar() {
             Home
           </Link>
           <Link className="text-textSecondary hover:text-white transition" to="/login">
-            Login
+            User
+          </Link>
+          <Link className="text-textSecondary hover:text-white transition" to="/provider/login">
+            Service provider
           </Link>
         </div>
 

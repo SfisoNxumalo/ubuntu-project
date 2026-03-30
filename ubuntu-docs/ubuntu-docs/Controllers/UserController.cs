@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ubuntu_docs.Application.DTOs;
 using ubuntu_docs.Application.Interfaces.IServices;
 
@@ -24,6 +25,7 @@ namespace ubuntu_docs.Controllers
             return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
@@ -35,7 +37,7 @@ namespace ubuntu_docs.Controllers
             return Ok(user);
         }
 
-        
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -44,7 +46,7 @@ namespace ubuntu_docs.Controllers
             return Ok(users);
         }
 
-        
+        [Authorize]
         [HttpGet("by-email")]
         public async Task<IActionResult> GetUserByEmail([FromQuery] string email)
         {
@@ -56,6 +58,7 @@ namespace ubuntu_docs.Controllers
             return Ok(user);
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
@@ -65,6 +68,34 @@ namespace ubuntu_docs.Controllers
                 return NotFound($"User with ID {id} not found");
 
             return NoContent();
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] AuthDTO loginModel)
+        {
+            try
+            {
+                var result = await _userService.Login(loginModel);
+
+                if (result == null)
+                    throw new Exception();
+
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
+                    Expires = DateTime.UtcNow.AddDays(7)
+                };
+
+                Response.Cookies.Append("refreshToken", result.RefreshToken, cookieOptions);
+
+                return Ok(result.UserDetails);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
     }
 }

@@ -3,6 +3,10 @@ using ubuntu_docs.Application.Interfaces.IServices;
 
 namespace ubuntu_docs.Application.Services
 {
+    /// <summary>
+    /// Azure Blob Storage implementation of  
+    /// responsible for uploading document files to a configured blob container.
+    /// </summary>
     public class BlobStorageService : IBlobStorageService
     {
         private readonly BlobContainerClient _container;

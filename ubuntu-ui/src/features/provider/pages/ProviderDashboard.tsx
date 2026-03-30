@@ -20,6 +20,7 @@ import {
 import { getProviderDocuments, getServiceProvidersUsers } from "../../../services/api_service";
 import type { UserDocument } from "../../../interfaces/UserDocument";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../../stores/authStore";
 
 /* Mock Data */
 const stats = [
@@ -40,10 +41,17 @@ export default function ProviderDashboard() {
 
   const [, setServiceProviderUsers] = useState<number>(0);
   const [uploadData, setuploadData] = useState<any[]>([]);
+  const user = useAuthStore((s) => s.user);
+  const navigate = useNavigate()
+
+  if(!user) {
+    navigate('/')
+    return
+  }
     
       useEffect(()=>{
             const fetchUsers = async() =>{
-              const res = await getServiceProvidersUsers("77dc48a7-ac12-4ad4-888b-8643451ccad5");
+              const res = await getServiceProvidersUsers(user?.id);
 
               if(res.status === 200){
                 setServiceProviderUsers(res.data.length)
@@ -57,7 +65,7 @@ export default function ProviderDashboard() {
               
                 useEffect(()=>{
                   const fetchUserDocuments = async() =>{
-                    const res = await getProviderDocuments("77dc48a7-ac12-4ad4-888b-8643451ccad5");
+                    const res = await getProviderDocuments(user?.id);
               
                     if(res.status === 200){
                       setUserDocuments(res.data)

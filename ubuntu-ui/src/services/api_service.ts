@@ -1,11 +1,14 @@
 import type { AxiosResponse } from "axios";
-import { AskAIEndpoint, checkAccessEndpoint, getDocumentByIdEndpoint, getProviderDocumentsEndpoint, getProviderUserEndpoint, getServiceProviderByIdEndpoint, getUserDocumentsEndpoint, grantAccessEndpoint, revokeAccessEndpoint, serviceProvidersEndpoint, uploadDocumentEndpoint } from "../endpoints/endpoint";
+import { AskAIEndpoint, checkAccessEndpoint, getDocumentByIdEndpoint, getProviderDocumentsEndpoint, getProviderUserEndpoint, getServiceProviderByIdEndpoint, getUserDocumentsEndpoint, grantAccessEndpoint, loginEndpoint, registerUserEndpoint, revokeAccessEndpoint, serviceProvidersEndpoint, uploadDocumentEndpoint } from "../endpoints/endpoint";
 import type { ServiceProvider } from "../interfaces/ServiceProvider";
 import { httpService } from "../utils/httpService/httpService";
 import type { UserDocument } from "../interfaces/UserDocument";
 import type { UploadedDocument } from "../interfaces/UploadedDocument";
 import type { ServiceProviderUser } from "../interfaces/ServiceProviderUser";
 import type { AskRequest, AskResponse } from "../interfaces/AskRequest";
+import type { loginRequest } from "../interfaces/AuthUser";
+import type { RegisterAuth } from "../interfaces/RegisterServiceProvider";
+import type { RegisterUser } from "../interfaces/RegisterUser";
 
 
 export async function getServiceProviders():Promise<AxiosResponse<ServiceProvider[]>> {
@@ -136,3 +139,35 @@ try {
   }
 }
 
+export async function loginUser(loginDetails:loginRequest, user:string) {
+   try{
+      const result = await httpService.post(loginEndpoint(user), loginDetails);
+      return result;
+   }
+   catch(error){
+      console.error('failed to login', error)
+      throw error; // rethrow if you want the caller to handle it
+   }
+}
+
+export async function RegisterServiceProvider(register:RegisterAuth) {
+   try{
+      const result = await httpService.post(serviceProvidersEndpoint, register);
+      return result;
+   }
+   catch(error){
+      console.error('failed to login', error)
+      throw error; // rethrow if you want the caller to handle it
+   }
+}
+
+export async function RegisterUserService(register:RegisterUser) {
+   try{
+      const result = await httpService.post(registerUserEndpoint, register);
+      return result;
+   }
+   catch(error){
+      console.error('failed to login', error)
+      throw error; // rethrow if you want the caller to handle it
+   }
+}

@@ -13,5 +13,7 @@ namespace ubuntu_docs.Application.Interfaces.IServices
         Task<IEnumerable<ProviderUserDto>> GetUsersByServiceProviderIdAsync(Guid serviceProviderId);
 
         Task<ServiceProviderDto> GetById(Guid id);
+
+        Task<AuthModel> Login(AuthDTO user);
     }
 }

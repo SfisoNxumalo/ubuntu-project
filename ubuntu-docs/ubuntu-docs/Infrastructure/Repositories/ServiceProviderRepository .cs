@@ -55,5 +55,11 @@ namespace ubuntu_docs.Infrastructure.Repositories
                 .Where(u => !u.IsDeleted)
                 .ToListAsync();
         }
+
+        public async Task<ServiceProviderEntity?> GetByEmailAsync(string email)
+        {
+            return await _context.ServiceProviders
+                .FirstOrDefaultAsync(u => u.Email == email && !u.IsDeleted);
+        }
     }
 }

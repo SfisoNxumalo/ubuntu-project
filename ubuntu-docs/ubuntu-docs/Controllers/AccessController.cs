@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ubuntu_docs.Application.DTOs;
 using ubuntu_docs.Application.Interfaces.IServices;
@@ -16,7 +17,7 @@ namespace ubuntu_docs.Controllers
             _accessService = accessService;
         }
 
-      
+        [Authorize]
         [HttpPost("grant")]
         public async Task<IActionResult> GrantAccess([FromBody] GrantAccessDto dto)
         {
@@ -25,7 +26,7 @@ namespace ubuntu_docs.Controllers
             return Ok(new { message = "Access granted successfully" });
         }
 
-        
+        [Authorize]
         [HttpPost("revoke")]
         public async Task<IActionResult> RevokeAccess([FromBody] GrantAccessDto dto)
         {
@@ -37,7 +38,7 @@ namespace ubuntu_docs.Controllers
             return Ok(new { message = "Access revoked successfully" });
         }
 
-        
+        [Authorize]
         [HttpGet("check")]
         public async Task<IActionResult> CheckAccess(Guid userId, Guid serviceProviderId)
         {
