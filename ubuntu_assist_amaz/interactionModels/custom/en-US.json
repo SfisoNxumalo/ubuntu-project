@@ -1,0 +1,50 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "intents": [
+        {
+          "slots": [],
+          "name": "GetDocumentsIntent",
+          "samples": [
+            "please get my docs",
+            "get docs",
+            "get my docs",
+            "all douments",
+            "fetch my documents",
+            "please fetch my documents",
+            "documents",
+            "Please get my documents",
+            "Get my documents"
+          ]
+        },
+        {
+          "slots": [],
+          "name": "ReadDocumentIntent",
+          "samples": [
+            "can you please read it",
+            "Can you read it",
+            "please read it",
+            "Please read for me",
+            "Read the document",
+            "Read"
+          ]
+        },
+        {
+          "slots": [
+            {
+              "name": "user_question",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "name": "AskQuestionIntent",
+          "samples": [
+            "question {user_question}",
+            "Ask {user_question}"
+          ]
+        }
+      ],
+      "types": [],
+      "invocationName": "ubuntu assist"
+    }
+  }
+}
